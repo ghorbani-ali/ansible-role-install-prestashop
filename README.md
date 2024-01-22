@@ -1,7 +1,7 @@
 Prestashop installation Ansible Role
 =========
 
-### Easy installation of PrestaShop 8.x on Debian/Ubuntu
+### Easy installation of PrestaShop 8.x on Debian/Ubuntu using Ansible
 
 # Requirements
 
