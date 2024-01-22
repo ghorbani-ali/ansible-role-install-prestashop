@@ -1,0 +1,44 @@
+---
+
+# Prestashop version
+# https://github.com/PrestaShop/PrestaShop/releases
+prestashop_version: "8.1.0"
+prestashop_download_url: "https://github.com/PrestaShop/PrestaShop/releases/download/{{ prestashop_version }}/prestashop_{{ prestashop_version }}.zip"
+
+# Path
+prestashop_root_path: "/var/www/{{ prestashop_domain }}"
+
+# Region
+prestashop_timezone: "America/New_York"
+prestashop_language: "en"
+prestashop_country: "en"
+
+# Domain
+prestashop_domain: "prestashop.test"
+
+# Database
+prestashop_db_server: "127.0.0.1"
+prestashop_db_user: "prestashop"
+prestashop_db_password: "prestashop"
+prestashop_db_name: "prestashop"
+prestashop_db_clear: 1
+prestashop_db_create: 1
+prestashop_db_prefix: "ps_"
+prestashop_db_engine: "InnoDB"
+
+# Options
+prestashop_name: "PrestaShop"
+prestashop_activity: 0
+prestashop_rewrite: 1
+prestashop_fixtures: 0
+
+# Admin
+prestashop_firstname: "PrestaShop"
+prestashop_lastname: "Developer"
+prestashop_email: "dev@{{ prestashop_domain }}"
+prestashop_password: "p_prestashop"
+
+# Backoffice
+prestashop_backoffice_admin_folder: "adminklwfjlkhF3DgG"
+
+prestashop_install_check: "prestashop-install-ansible.txt"

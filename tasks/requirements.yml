@@ -1,0 +1,6 @@
+---
+
+- name: Install python mysql requirements
+  package:
+    name: python3-pymysql
+    state: latest

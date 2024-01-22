@@ -1,0 +1,8 @@
+---
+
+- name: Create database user with name and password with all database privileges
+  mysql_user:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    name: "{{ prestashop_db_user }}"
+    password: "{{ prestashop_db_password }}"
+    priv: '*.*:ALL'

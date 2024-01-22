@@ -1,0 +1,93 @@
+---
+
+- name: include requirements process
+  include_tasks: requirements.yml
+
+- name: Check if PrestaShop is already installed.
+  stat:
+    path: "{{ prestashop_root_path }}/{{ prestashop_install_check }}"
+  register: prestashop_install_status
+
+- name: Create the PrestaShop directory.
+  file:
+    path: "{{ prestashop_root_path }}"
+    owner: www-data
+    group: www-data
+    mode: 0755
+    state: directory
+  when: prestashop_install_status.stat.exists == false
+
+- name: Download PrestaShop zip file
+  get_url:
+    url: "{{ prestashop_download_url }}"
+    dest: "{{ prestashop_root_path }}/prestashop_{{ prestashop_version }}.zip"
+    timeout: 300
+  when: prestashop_install_status.stat.exists == false
+
+- name: Unzip Prestashop.
+  unarchive:
+    src: "{{ prestashop_root_path }}/prestashop_{{ prestashop_version }}.zip"
+    dest: "{{ prestashop_root_path }}"
+    remote_src: true
+    owner: www-data
+    group: www-data
+  when: prestashop_install_status.stat.exists == false
+
+- name: Unzip Prestashop Installer.
+  unarchive:
+    src: "/var/www/prestashop.test/prestashop.zip"
+    dest: "{{ prestashop_root_path }}"
+    remote_src: true
+    owner: www-data
+    group: www-data
+  when: prestashop_install_status.stat.exists == false
+
+- name: include preinstall process
+  include_tasks: preinstall.yml
+  when: prestashop_install_status.stat.exists == false
+
+- name: Install Prestashop from the console.
+  command: "php8.1 index_cli.php \
+   --timezone={{ prestashop_timezone }} \
+   --domain={{ prestashop_domain }} \ 
+   --db_server={{ prestashop_db_server }} \
+   --db_user={{ prestashop_db_user }} \
+   --db_password={{ prestashop_db_password }} \
+   --db_name={{ prestashop_db_name }} \
+   --db_clear={{ prestashop_db_clear }} \
+   --db_create={{ prestashop_db_create }} \
+   --prefix={{ prestashop_db_prefix }} \
+   --engine={{ prestashop_db_engine }} \
+   --name={{ prestashop_name }} \
+   --activity={{ prestashop_activity }} \
+   --language={{ prestashop_language }} \
+   --country={{ prestashop_country }} \
+   --firstname={{ prestashop_firstname }} \
+   --lastname={{ prestashop_lastname }} \
+   --password={{ prestashop_password }} \
+   --email={{ prestashop_email }} \
+   --rewrite={{ prestashop_rewrite }} \
+   --fixtures={{ prestashop_fixtures }}"
+  args:
+    chdir: "{{ prestashop_root_path }}/install"
+  when: prestashop_install_status.stat.exists == false
+
+- name: Delete the Prestashop zip files and install directory.
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ prestashop_root_path }}/prestashop.zip"
+    - "{{ prestashop_root_path }}/prestashop_{{ prestashop_version }}.zip"
+    - "{{ prestashop_root_path }}/install"
+  when: prestashop_install_status.stat.exists == false
+
+- name: Rename the PrestaShop admin directory.
+  command: "mv {{ prestashop_root_path }}/admin {{ prestashop_root_path }}/{{ prestashop_backoffice_admin_folder }}"
+  when: prestashop_install_status.stat.exists == false
+
+- name: create a file to track prestashop installation status and version
+  copy:
+    content: "Prestashop {{ prestashop_version }}"
+    dest: "{{ prestashop_root_path }}/{{ prestashop_install_check }}"
+  when: prestashop_install_status.stat.exists == false
