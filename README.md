@@ -81,7 +81,7 @@ prestashop_db_prefix: "ps_"
 prestashop_db_engine: "InnoDB"
 ```
 
-### Prestashop admin user account
+### Prestashop admin user account parameters
 
 * `prestashop_firstname` : Admin user firstname.
 * `prestashop_lastname` : Admin user lastname.
