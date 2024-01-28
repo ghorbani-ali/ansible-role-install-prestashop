@@ -60,7 +60,7 @@ will be written in the database and `.htaccess` file if using apache.
 ```yml
 prestashop_domain: "prestashop.test"
 ```
-### Prestashop database variables
+### Prestashop database parameters
 * `prestashop_db_server` : Database server hostname. any valid MySQL valid server name or IP address.
 * `prestashop_db_user` : Database server user (will be created).
 * `prestashop_db_password` : Database server password. the valid password for `db_user`.
